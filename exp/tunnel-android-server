@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+import re
+import os
+dirname = os.path.dirname(os.path.realpath(__file__))
+
+
+def ping(host):
+    return '1 packets received' in os.popen(f'ping -c 1 -t 1 {host}').read()
+
+
+def get_wlan(device):
+    text = device.shell('ip addr show wlan0')
+    m = re.search(r'inet (\d+\.\d+\.\d+\.\d+)', text)
+    if m:
+        return m.group(1)
+
+
+def get_uuid(device):
+    text = device.shell('getprop')
+    prop = dict(re.findall(r'\[(.*)\]: \[(.*)\]', text))
+    return prop.get('ro.serialno')
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--serial', help='Use device with given serial')
+    args = parser.parse_args()
+    import adbutils
+    import uiautomator2
+    device = adbutils.adb.device(serial=args.serial)
+    wlan = get_wlan(device)
+    assert ping(wlan)
+    uuid = get_uuid(device)
+    assert uuid
+    os.system(f'adb -s {device.serial} tcpip 5555')
+    uiautomator2.connect(addr=device.serial)
+    cmd = os.path.join(dirname, 'tunnel-server')
+    print(f'sharing an android device: {uuid}')
+    os.system(f'{cmd} {wlan} {uuid}')
