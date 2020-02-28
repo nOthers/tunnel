@@ -4,10 +4,6 @@ import os
 dirname = os.path.dirname(os.path.realpath(__file__))
 
 
-def ping(host):
-    return '1 packets received' in os.popen(f'ping -c 1 -t 1 {host}').read()
-
-
 def get_wlan(device):
     text = device.shell('ip addr show wlan0')
     m = re.search(r'inet (\d+\.\d+\.\d+\.\d+)', text)
@@ -30,9 +26,8 @@ if __name__ == '__main__':
     import uiautomator2
     device = adbutils.adb.device(serial=args.serial)
     wlan = get_wlan(device)
-    assert ping(wlan)
     uuid = get_uuid(device)
-    assert uuid
+    assert wlan and uuid
     os.system(f'adb -s {device.serial} tcpip 5555')
     uiautomator2.connect(addr=device.serial)
     cmd = os.path.join(dirname, 'tunnel-server')
