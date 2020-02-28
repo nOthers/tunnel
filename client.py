@@ -24,7 +24,7 @@ if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('uuid', help='Unique ID of the device')
-    parser.add_argument('portables', nargs='*', help='Port tables for mapping, such as "80" or "80:8080"')
+    parser.add_argument('portables', nargs='+', help='Port tables for mapping, such as "80" or "80:8080"')
     args = parser.parse_args()
     import os
     tunnel_host = os.environ.get('TUNNEL_HOST', '0.0.0.0')

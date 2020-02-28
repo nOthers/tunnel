@@ -1,5 +1,6 @@
-CLIENT_PORT = 0x7463
+TUNNEL_PORT = 0x7474
 SERVER_PORT = 0x7473
+CLIENT_PORT = 0x7463
 
 
 async def read(reader):
