@@ -83,7 +83,6 @@ async def server_cb(reader, writer):
                     except EOFError:
                         pass
         finally:
-            print('del_server')
             if SERVER_STORE.get(serverID) is writer:
                 del SERVER_STORE[serverID]
                 STATUS.del_server(serverID)
