@@ -37,8 +37,7 @@ async def link(host, uuid, wlan):
                 writer_store[clientID].write(data)
         elif action == 'close':
             if clientID in writer_store:
-                await writer_store[clientID].drain()
-                writer_store[clientID].close()
+                await close(writer_store[clientID])
                 del writer_store[clientID]
 
 
