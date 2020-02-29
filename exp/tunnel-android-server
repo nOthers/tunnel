@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import re
 import os
-dirname = os.path.dirname(os.path.realpath(__file__))
+mydir = os.path.dirname(os.path.realpath(__file__))
 
 
 def get_wlan(device):
@@ -30,6 +30,6 @@ if __name__ == '__main__':
     assert wlan and uuid
     os.system(f'adb -s {device.serial} tcpip 5555')
     uiautomator2.connect(addr=device.serial)
-    cmd = os.path.join(dirname, 'tunnel-server')
+    program = os.path.join(mydir, 'tunnel-server')
     print(f'sharing an android device: {uuid}')
-    os.system(f'{cmd} {wlan} {uuid}')
+    os.system(f'{program} {wlan} {uuid}')
