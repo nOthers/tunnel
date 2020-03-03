@@ -45,7 +45,10 @@ class Status(dict):
             self.notify_one(writer)
 
     def notify_one(self, writer):
-        write(writer, json.dumps(self).encode() + b'\n')
+        try:
+            write(writer, json.dumps(self).encode() + b'\n')
+        except EOFError:
+            pass
 
 
 STATUS = Status()

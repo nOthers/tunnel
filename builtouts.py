@@ -31,5 +31,8 @@ def write(writer, data):
 
 
 async def close(writer):
-    await writer.drain()
+    try:
+        await writer.drain()
+    except ConnectionError:
+        pass
     writer.close()

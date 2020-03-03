@@ -34,7 +34,10 @@ async def link(host, uuid, wlan):
             n = int((await readline(reader)).decode().strip())
             data = await readexactly(reader, n)
             if clientID in writer_store:
-                writer_store[clientID].write(data)
+                try:
+                    writer_store[clientID].write(data)
+                except EOFError:
+                    pass
         elif action == 'close':
             if clientID in writer_store:
                 await close(writer_store[clientID])
